@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21_key的原理</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        react和vue中的key有什么作用？(key的原理)
+            1.虚拟DOM中的key左右：
+                key是虚拟Dom对象的标识，当数据发生变化时Vue会根据【新数据】生成【新的虚拟DOM】
+                随后Vue进行【新虚拟DOM】和 【旧虚拟DOM】的差异比较，比较规则如下
+                对比规则：
+                    -.旧虚拟DOM中找到了与新虚拟DOM相同的key:
+                        1.若虚拟DOM中内容没变，直接使用之前的真实DOM
+                        2.若虚拟DOM中内容变了，则生成新的真实DOM，随后替换掉页面中之前的真实DOM
+                    二.旧虚拟DOM中未找到与新虚拟DOM相同的key
+                        创建新的真实DOM，随后渲染到页面
+            2.用index作为key可能会引发的问题
+                一 若对数据进行: 逆向添加、逆向删除等破坏顺序操作
+                    会产生没有必要的真实DOM更新 ---》   界面效果没问题，但效率低
+                二.如果结构中还包含输入类的DOM
+                    会产生错误DOM更新 ---》 界面有问题
+            
+     -->
+    <div id="root">
+        <dl>
+            <dt>人员列表,遍历数组</dt>
+            <dd v-for="(value,index) in persons" :key="index">
+                {{value.id}}-{{value.name}}-{{value.age}}
+                <input type="text">
+            </dd>
+        </dl>
+        <button @click="addPerson">添加一个老刘</button>
+
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                persons: [
+                    { id: "001", name: "张三", age: 18 },
+                    { id: "002", name: "李四", age: 19 },
+                    { id: "003", name: "王五", age: 20 },
+                ]
+            },
+            methods: {
+                addPerson(){
+                    const addInfo = { id: "004", name: "老刘", age: 21 };
+                    this.persons.unshift(addInfo)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

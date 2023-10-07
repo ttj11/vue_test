@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22_列表过滤</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+       
+     -->
+    <div id="root">
+        <!-- @keyup.enter="searchName() -->
+        <input type="text" placeholder="请输入姓名" v-model="keyWord">
+            <ul>
+                <li v-for=" (p,index) of filPersons" :key="p.id">
+                    {{p.name}}-{{p.gender}}-{{p.age}}
+                 </li>
+            </ul>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                keyWord: "",
+                persons: [
+                    { id: "001", name: "马冬梅", age: 18, gender: "男" },
+                    { id: "002", name: "周冬雨", age: 28, gender: "男" },
+                    { id: "003", name: "周杰伦", age: 38, gender: "男" },
+                    { id: "004", name: "温兆伦", age: 48, gender: "男" },
+                ],
+                filPerson:[],
+
+            },
+            computed:{
+                filPersons(){
+                    return this.filPerson = this.persons.filter((item) => {
+                        return item.name.indexOf(this.keyWord) != -1
+                    })
+                }
+            }
+           /*  watch: {
+                keyWord: {
+                    immediate:true,
+                    handler(val) {
+                        console.log(this.keyWord);
+                        this.filPerson = this.persons.filter((p) => {
+                            return p.name.indexOf(val) != -1
+                        })
+                    }
+                }
+            } */
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18_绑定class样式和内联样式</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .basic { width: 300px;height: 100px;
+            border: 3px solid #000;
+            margin-bottom: 20px;}
+        .normal {background-color: beige;}
+        .happy {background-color: brown;border-radius: 50%;}
+        .sad {background-color: rgb(7, 101, 70);border: 3px dotted sienna;}
+        .atguigu1{background-color: blueviolet;}
+        .atguigu2{background-color: blue;}
+        .atguigu3{background-color: salmon;}
+    </style>
+</head>
+<body>
+    <!-- 
+        绑定样式：
+            1.class样式
+                写法 :class="xxx" xxx可以是字符串、对象、数组
+                    字符串写法适用于：类名不确定，要动态获取
+                    对象写法适用于:要绑定多个样式，个数不确定，名字也不确定
+                    数组写法适用于：要绑定多个样式，个数确定，名字也确定，但不确定用不用
+            2.style样式
+                :style="{fontSize:xxx}"  其中xxx是动态值
+                :style="[xxx,xxx]" 其中xxx是样式对象
+
+        shift() 删除数组的第一个
+        pop()   删除数组的最后一个
+        push()  在数组的末尾添加新元素
+        unshift()在数组的首位添加新元素
+        join()  用指定的分隔符将数组每一项拼接为字符串
+        slice() 按照条件查找出其中的部分元素
+        splice()对数组进行增删改
+
+     -->
+    <div id="root">
+        <!-- 绑定class样式 -- 字符串写法，适用于：样式的类名不确定，需要动态指定 -->
+        <div class="basic" :class="mood" @click="changeMood">{{name}}</div>
+
+        <!-- 
+            绑定class样式 -- 数组写法，适用于：要绑定的样式个数不确定，名字也不确定 
+                想要操作 :class里的属性可以用shift方法，push方法,pop更加简便
+        -->
+        <div class="basic" :class="claArr" @click="changeMood">{{name}}</div>
+
+        <!-- 绑定class样式 -- 对象写法，适用于：要绑定的样式个数确定，名字也确定，但要动态决定用不用 -->
+        <div class="basic" :class="classObj">{{name}}</div>
+
+        <!-- 绑定内联样式 -- 对象写法  2个单词组成的要写成驼峰 -->
+        <div class="basic" :style="styleObj">{{name}}</div>
+         <!-- 绑定内联样式 -- 数组写法  -->
+        <div class="basic" :style="[styleObj,styleObj2]">{{name}}</div>
+
+
+    </div>
+    <script>
+        /* 
+        */
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                name: "尚硅谷",
+                mood: "normal",
+                claArr:['atguigu1','atguigu2','atguigu3'],
+                classObj:{
+                    atguigu1:false,
+                    atguigu2:false
+                },
+                styleObj:{
+                    fontSize:"40px",
+                    color:"blue",
+                }
+                ,styleObj2:{
+                    backgroundColor:"brown"
+                }
+            },
+            methods: {
+                changeMood() {
+                    const classArr = ["normal", "happy", "sad"]
+                    //Math.random() 会出现0-1的随机数，包括0 但不包括1
+                    const randomClass = Math.floor(Math.random() * 3);
+                    this.mood = classArr[randomClass];
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

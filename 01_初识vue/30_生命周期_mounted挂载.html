@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30_生命周期_mounted挂载</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        生命周期:
+            1.又名:生命周期回调函数、生命周期函数、生命周期钩子
+            2.是什么:Vue在关键时刻帮我们调用的一些特殊名称的函数
+            3.生命周期函数的名字不可更改，但函数里的具体内容是程序员根据需求编写的
+            4.生命周期函数中的this指向是 vm 或 组件实例对象
+     -->
+    <div id="root">
+        <h3 :style="{opacity}">欢迎学习Vue</h3>
+    </div>
+    <script>
+        
+        new Vue({
+            el:"#root",
+            data:{
+                opacity:1
+            },
+            mounted() {
+                setInterval(()=>{
+                    this.opacity -= 0.1
+                    //判断透明度是不是 <= 0 ,要是直接判断 是不是 ===0的话会出错，因为js中 0.1+0.2可能不会等于 0.3
+                    if(this.opacity <= 0){this.opacity = 1}
+                },100)
+            },
+        })
+    </script>
+</body>
+
+</html>

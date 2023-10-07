@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>33_非单文件组件嵌套</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        
+     -->
+    <div id="root">
+        <app></app>
+    </div>
+    <script>
+        //创建组件
+        const student = Vue.extend({
+            name:"student",
+            template:`
+                <div>
+                    <h3>学生姓名:{{studentName}}</h3>
+                </div>
+            `,
+            data() {
+                return {studentName:"孙悟空"}
+            },
+        })
+
+        //创建组件
+        const school = Vue.extend({
+            name:"school",
+            template:`
+                <div>
+                    <h3>学校姓名:{{schoolName}}</h3>
+                    <student></student>
+                </div>
+            `,
+            data(){
+                return {schoolName:"尚硅谷"}
+            },
+            components:{
+                student//要往哪一个组件里嵌套就在哪一个组件里注册
+            }
+        })
+
+        //创建组件 Vue.extend({})可以简写为{},
+        const hello = {
+            name:"hello",
+            template:`
+                <div>hello~ 同学</div>
+            `,
+        }
+        const app = {
+            name:"app",
+            template:`
+                <div>
+                    <school></school>
+                    <hello></hello>
+                </div>
+            `,
+            components:{school,hello}
+        }
+
+        const vm = new Vue({
+            el:"#root",
+            components:{
+                app//局部注册组件
+            }
+        })
+    </script>
+</body>
+
+</html>

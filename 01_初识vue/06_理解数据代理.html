@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06_理解数据代理</title>
+</head>
+
+<body>
+    <!-- 
+        
+
+     -->
+    <script>
+        /* 
+            数据代理： 通过 一个对象 代理对  另一个对象中属性的操作(读/取)
+        */
+       //一个基础的数据代理例子
+       let obj = {x:100}
+       let obj2 = {y:100}
+        Object.defineProperty(obj2,"x",{
+            get(){
+                //返回的是obj里的 x
+                return obj.x;
+            },
+            set(value){
+                //修改 obj2的 x 值时 把obj的 x 也修改了
+                obj.x = vulue;
+            }
+        })
+    </script>
+</body>
+
+</html>

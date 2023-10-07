@@ -1,0 +1,25 @@
+
+<!-- 安装插件 vetur -->
+<template>
+    <div>
+        <School></School>
+        <Student></Student>
+    </div>
+</template>
+
+<script>
+
+    import School from "./School";
+import School from './School.vue';
+    import Student from "./Student"
+
+    export default {
+        name: "App",
+        components:{
+            School,
+            Student
+        }
+    }
+</script>
+
+<style></style>

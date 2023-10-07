@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19_条件渲染</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .box{
+           width: 200px;padding: 10px;
+           text-align: center;border: 2px solid red;
+           margin-right: 10px;float: left;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 
+        条件渲染：
+            1.v-if 写法
+                ①.v-if = "表达式"
+                ②.v-else-if = "表达式"
+                ③.v-else = "表达式"
+                适用于:切换频率较低的场景 
+                特点:不展示的DOM元素直接被移除
+                注意：v-if可以和: v-else-if、v-else一起使用，但要求结构不能被打断
+            
+            2.v-show 写法
+                v-show = "表达式"
+                适用于：切换频率较高的场景
+                特点: 不展示的DOM元素未被移除，仅仅是使用样式隐藏掉
+            
+            注意：使用v-if时，元素可能无法获取到，而使用v-show一定可以获取到
+                
+     -->
+    <div id="root">
+        <!-- 使用v-show做条件渲染  -->
+        <div class="box">
+            <h2 v-show="true">欢迎来到{{name}}</h2>
+            <h2 v-show="show">欢迎来到{{name}}</h2>
+            <button @click="isShow">点击切换显示/隐藏</button>
+        </div>
+
+
+        <!-- 使用v-if做条件渲染 -->
+        <div class="box">
+            <h2 v-if="true">我的if是false所以我显示了</h2>
+            <h2 v-if="1===1">欢迎来到{{name}}</h2>
+        </div>
+
+        <!-- v-else 和 v-else-if -->
+        <div class="box">
+            <h2>N的值是：{{n}}</h2>
+            <h2 v-if="n===1">Angular</h2>
+            <h2 v-else-if="n===2">React</h2>
+            <h2 v-else-if="n===3">Vue</h2>
+            <h2 v-else="">哈哈哈哈哈</h2>
+            <button @click="n++;">点我n+1</button>
+        </div>
+
+        <!-- v-if与template得配合使用 -->
+        <template v-if="n===1">
+            <h2>Angular</h2>
+            <h2>React</h2>
+            <h2>Vue</h2>
+        </template>
+    </div>
+    <script>
+        /* 
+        */
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                name: "尚硅谷",
+                n:1,
+                show: true
+            },
+            methods: {
+                isShow() {this.show = !this.show}
+            },
+            watch:{
+                n:{
+                    handler(val){if(val === 4){this.n = 1;}}
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

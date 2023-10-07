@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09_事件修饰符</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        * {margin: 20px;}
+        #root{display: flex;}
+        #root>div{width: 50%;}
+        .box1 {background-color: aqua;}
+        .box2 {background-color: brown;}
+        .box3 {background-color: rgb(42, 126, 165);}
+        .box4 {padding: 10px;
+            background-color: rgb(42, 126, 165);}
+        .box5 {padding: 10px;
+            background-color: rgb(129, 70, 169);}
+        ul{width: 200px;height: 200px;
+            background-color: beige;overflow: auto;}
+        li{height: 100px;}
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 阻止默认事件 -->
+        <div class="box1">
+            <h3>欢迎来到{{name}}学习</h3>
+            <a href="http://www.atguigu.com" @click.prevent="showInfo()">我是a标签，prevent修饰符能阻止我的默认跳转行为</a>
+        </div>
+        <!-- 阻止事件冒泡 -->
+        <div class="box2" @click="showInfo1">
+            <button @click.stop="showInfo">我会冒泡，除非用修饰符stop阻止我</button>
+        </div>
+        <!-- 事件只触发一次 -->
+        <div class="box3">
+            <button @click.once="showInfo">用了修饰符once我就只能被点击一次</button>
+        </div>
+        <!-- 使用时间的捕获模式 -->
+        <div class="box4" @click.capture="showMsg(1)">
+            1
+            <div class="box5" @click="showMsg2(2)">2 先捕获再冒泡用修饰符capture 默认是冒泡</div>
+        </div>
+        <!-- 只有event.target当前操作的元素是才触发事件 -->
+        <div class="box3" @click.self="showTarget">
+            <button @click="showTarget2">用了修饰符self我就只对当前的操作元素起效</button>
+        </div>
+        <!-- 事件的默认行为立即执行，无需等待事件回调执行完毕  
+             @scroll滚动条发生上下移动触发 @wheel鼠标滚动上下滚动触发 
+             会先触发滚轮再触发滚动条
+        -->
+        <ul @wheel.passive="scrollFun">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+
+    </div>
+    <script>
+        /* 
+             Vue中的事件修饰符：
+                1.prevent：阻止默认事件(常用)
+                2.stop：阻止事件冒泡（常用）
+                3.once：事件只触发一次(常用)
+                4.capture:使用事件的捕获模式
+                5.self：只有event.target当前操作的元素是才触发事件
+                6.passive：事件的默认行为立即执行，无需等待事件回调执行完毕
+        */
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                name: "尚硅谷",
+                address: "北京昌平"
+            },
+            methods: {
+                showInfo() {
+                    // js中阻止默认行为
+                    // event.preventDefault();
+                    // js中阻止冒泡
+                    // event.stopPropagation();
+                    alert("同学你好")
+                },
+                showInfo1(event) {alert("我是外层的div")},
+                showMsg(n){alert(n)},
+                showMsg2(n){alert(n)},
+                showTarget(e){console.log(e.target);},
+                showTarget2(e){console.log(e.target);},
+                scrollFun(){
+                    for (let i = 0; i < 100000; i++) {console.log("@");}
+                    console.log("累坏了");
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

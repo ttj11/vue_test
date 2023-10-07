@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24_Vue监测数据改变的原理</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        Vue监视数据的原理：
+            1.Vue会监视data中所有层次的数据
+
+            2.如何监测对象中的数据？
+                通过setter实现监视，且要在new Vue时就传入要监测的数据
+                一.对象中后追加的属性，Vue默认不做响应式处理
+                二.如需给后添加的属性做响应式，请使用如下API：
+                    Vue.set(target,propertyName/index,value) 或
+                    vm.$set(target,propertyName/index,value)
+
+            3.如何监测数组中的数据？
+                通过包裹数组更新元素的方法实现，本质就是做了2件事：
+                一.调用原生对应的方法对数组进行更新
+                二.重做解析模板，进而更新页面
+            
+            4.在Vue修改数组中的某个元素一定要用如下方法:
+                1.使用这些API: push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+                2.Vue.set() 或 vm.$set()
+
+            特别注意: Vue.set() 和 vm.$set() 不能给 vm 或 vm的根数据对象 添加属性 ！！！
+     -->
+    <div id="root">
+        <button @click="updateMei">点我更新马冬梅的信息</button>
+        <ul>
+            <li v-for="(p,index) in persons" :key="index">
+                {{p.name}} -- {{p.age}} -- {{p.gender}}
+            </li>
+        </ul>
+        <hr>
+        <h1>学生信息</h1>
+        <button @click="student.age++">年龄+1岁</button>
+        <button @click="addSex">添加性别属性,默认值:男</button>
+        <button @click="updateSex">修改性别</button>
+        <button @click="addFriend">在列表首位添加一个朋友</button>
+        <button @click="updateForstName">修改第一个朋友的名字为张三</button>
+        <button @click="updateHobby">修改第一个爱好为:开车</button>
+        <button @click="filHobby">过滤掉爱好中的抽烟</button>
+        <hr>
+        <h2>学生信息</h2>
+        <h3>姓名:{{student.name}}</h3>
+        <h3>年龄:{{student.age}}</h3>
+        <h3 v-show="student.sex">性别:{{student.sex}}</h3>
+        <h3>小鱼儿的朋友</h3>
+        <ul>
+            <li v-for="(f,index) of friends" :key="index">
+                {{f.name}} -- {{f.age}} -- {{f.sex}} 
+            </li>
+        </ul>
+        <h3>我的爱好:</h3>
+        <ol>
+            <li v-for="(h,index) of student.hobby" :key="index">{{h}}</li>
+        </ol>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                student: {
+                    name: "小鱼儿",
+                    age: 20,
+                    hobby:["抽烟","喝酒","染头发"]
+                },
+                friends: [
+                    { name: "mary", age: 10, sex: "女" },
+                    { name: "tom", age: 11, sex: "男" },
+                ],
+                persons: [
+                    { id: "001", name: "马冬梅", age: 38, gender: "女" },
+                    { id: "002", name: "周冬雨", age: 28, gender: "男" },
+                    { id: "003", name: "周杰伦", age: 08, gender: "男" },
+                    { id: "004", name: "温兆伦", age: 48, gender: "男" },
+                ],
+            },
+            methods: {
+                addSex() {//添加性别属性 默认值男
+                    // Vue.set(this.student,"sex","男")
+                    this.$set(this.student, "sex", "男")
+                },
+                updateSex() {//修改性别
+                    this.$set(this.student, "sex", "女")
+                },
+                addFriend() {//在列表首位添加一个朋友
+                    this.friends.unshift({ name: "hana", age: 13, sex: "女" })
+                    // Vue.set(this.friends,0,{ name: "hana", age: 13, sex: "女" })
+                },
+                updateForstName(){//修改第一个朋友的名字为张三
+                    this.friends[0].name = "张三"
+                },
+                updateHobby(){//修改第一个爱好为:开车
+                    this.student.hobby.splice(0,1,"开车")
+                },
+                filHobby(){//过滤掉爱好中的抽烟
+                    this.student.hobby= this.student.hobby.filter((h)=>{
+                        return h !== "抽烟"
+                    })
+                },
+                updateMei() {
+                    /* this.persons[0].name = "马老师"
+                    this.persons[0].age = 50
+                    this.persons[0].gender = "男" //奏效*/
+                    // this.persons[0] = { id: "001", name: "马老师", age: 50, gender: "男" }//不奏效
+                    // this.persons.splice(0,1,{ id: "001", name: "马老师", age: 50, gender: "男"})//奏效
+                    // Vue.set(this.persons,0,{ id: "001", name: "马老师", age: 50, gender: "男"})//奏效
+                    this.$set(this.persons, 0, { id: "001", name: "马老师", age: 50, gender: "男" })//奏效
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
